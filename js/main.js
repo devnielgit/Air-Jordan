@@ -1,0 +1,527 @@
+// js/main.js
+gsap.registerPlugin(ScrollTrigger);
+
+// intro
+gsap.from(".title span", {
+  y: 40,
+  opacity: 0,
+  duration: 0.9,
+  stagger: 0.1,
+  ease: "power3.out"
+});
+
+gsap.from(".hero-header img", {
+  y: -20,
+  opacity: 0,
+  duration: 0.8,
+  stagger: 0.1,
+  ease: "power2.out"
+});
+
+
+// hero
+const heroStackTl = gsap.timeline({
+  scrollTrigger: {
+    trigger: ".hero-stack",
+    start: "top top",
+    end: "+=160%",
+    scrub: true,
+    pin: true,
+  }
+});
+
+
+heroStackTl.to(".hero", {
+  scale: 0.34,
+  borderRadius: "26px",
+  boxShadow: "0 40px 110px rgba(0,0,0,0.9)",
+  transformOrigin: "50% 50%",
+  ease: "power2.inOut"
+}, 0);
+
+
+heroStackTl.to([".left", ".hero-header"], {
+  opacity: 0,
+  ease: "power1.out"
+}, 0.05);
+
+
+heroStackTl.fromTo(".section-frame",
+  { opacity: 0 },
+  { opacity: 1, ease: "power2.out" },
+  0.3
+);
+
+
+heroStackTl.from(".outline-text", {
+  opacity: 0,
+  y: (i) => i === 0 ? -40 : 40,
+  stagger: 0.15,
+  ease: "power2.out"
+}, 0.6);
+
+heroStackTl.from(".frame-jumpman", {
+  opacity: 0,
+  y: 60,
+  scale: 0.7,
+  ease: "power3.out"
+}, 1);
+
+
+heroStackTl.to(".frame-overlay", {
+  opacity: 1,
+  ease: "power2.out"
+}, 0.8);
+
+
+// texto outline
+document.querySelectorAll(".outline-text").forEach(el => {
+  const base = el.textContent.trim();
+  const repeated = (base + "   ").repeat(8);
+  el.textContent = repeated;
+});
+
+
+gsap.to(".outline-text--top", {
+  xPercent: -50,
+  duration: 18,
+  repeat: -1,
+  ease: "none",
+  scrollTrigger: {
+    trigger: ".hero-stack",
+    start: "top top",
+  }
+});
+
+gsap.to(".outline-text--bottom", {
+  xPercent: 50,
+  duration: 18,
+  repeat: -1,
+  ease: "none",
+  scrollTrigger: {
+    trigger: ".hero-stack",
+    start: "top top",
+  }
+});
+
+/* ================================
+   SECCIÓN 3 – animación de entrada
+================================ */
+
+const storyTl = gsap.timeline({
+  scrollTrigger: {
+    trigger: ".section-story",
+    start: "top 100%",   // ⬅ entra mucho antes, casi seguida de la 2
+    end: "bottom 30%",
+    scrub: true
+  }
+});
+
+// Título sube desde abajo
+storyTl.to(".story-title", {
+  opacity: 1,
+  y: 0,
+  ease: "power2.out"
+}, 0.45);
+
+// Texto sube desde abajo un poco más tarde
+storyTl.to(".story-text", {
+  opacity: 1,
+  y: 0,
+  ease: "power2.out"
+}, 0.35);
+
+// Imagen izquierda entra desde la izquierda
+storyTl.to(".story-img--left", {
+  opacity: 1,
+  x: 0,
+  ease: "power2.out"
+}, 0.25);
+
+// Imagen derecha entra desde la derecha
+storyTl.to(".story-img--right", {
+  opacity: 1,
+  x: 0,
+  ease: "power2.out"
+}, 0.35);
+
+/* ================================
+   SECCIÓN 4 – CARDS VERTICALES
+================================ */
+
+gsap.utils.toArray(".history-card").forEach((card, i) => {
+  gsap.to(card, {
+    scrollTrigger:{
+      trigger: card,
+      start: "top 100%",    // entra desde fuera al bajar
+      end: "top 25%",
+      scrub: true
+    },
+    opacity:1,
+    y:0,
+    ease:"power2.out"
+  });
+});
+
+/* ================================
+   SECCIÓN 5 – SCROLL HORIZONTAL
+================================ */
+
+const horizontalTrack = document.querySelector(".horizontal-track");
+if (horizontalTrack) {
+  const panels = gsap.utils.toArray(".h-panel");
+  const totalPanels = panels.length;
+
+  gsap.to(panels, {
+    xPercent: -100 * (totalPanels - 1),
+    ease: "none",
+    scrollTrigger: {
+      trigger: ".section-horizontal",
+      pin: true,
+      scrub: 1,
+      snap: 1 / (totalPanels - 1),
+      start: "top top",
+      end: () => "+=" + window.innerWidth * (totalPanels - 1)
+    }
+  });
+}
+
+/* ================================
+   SECCIÓN 6 – DUELO / OPOSICIÓN
+================================ */
+
+const duelTl = gsap.timeline({
+  scrollTrigger: {
+    trigger: ".section-duel",
+    start: "top 70%",
+    end: "top 10%",
+    scrub: true
+  }
+});
+
+// 1) Kicker entra suave desde abajo
+duelTl.fromTo(".duel-kicker",
+  { opacity: 0, y: 10 },
+  { opacity: 1, y: 0, ease: "power2.out" },
+  0
+);
+
+// 2) Imágenes entran desde los lados
+duelTl.from(".duel-col--left img", {
+  x: -120,
+  opacity: 0,
+  ease: "power2.out"
+}, 0.3);
+
+duelTl.from(".duel-col--right img", {
+  x: 120,
+  opacity: 0,
+  ease: "power2.out"
+}, 0.3);
+
+// 3) Textos: fade + desplazamiento lateral
+//    Nike desde la izquierda
+duelTl.fromTo(".duel-col--left .duel-text",
+  { opacity: 0, x: -40 },
+  { opacity: 1, x: 0, ease: "power2.out" },
+  0.6
+);
+
+//    Jordan desde la derecha
+duelTl.fromTo(".duel-col--right .duel-text",
+  { opacity: 0, x: 40 },
+  { opacity: 1, x: 0, ease: "power2.out" },
+  0.7
+);
+
+
+/* ================================
+   SECCIÓN 7 – CAMPAÑA “BANNED”
+================================ */
+
+// Animación de entrada al hacer scroll
+gsap.to(".campaign-content", {
+  scrollTrigger: {
+    trigger: ".section-campaign",
+    start: "top 50%",
+    end: "top 5%",
+    scrub: true
+  },
+  opacity: 1,
+  y: 0,
+  ease: "power2.out"
+});
+
+// Popup de vídeo tras unos segundos de hover
+const campaignContent = document.querySelector(".campaign-content");
+const campaignOverlay = document.getElementById("campaignVideo");
+const campaignVideo   = campaignOverlay ? campaignOverlay.querySelector(".campaign-video") : null;
+const campaignClose   = campaignOverlay ? campaignOverlay.querySelector(".campaign-video-close") : null;
+
+let campaignHoverTimeout;
+
+if (campaignContent && campaignOverlay && campaignVideo && campaignClose) {
+  // cuando el usuario pasa el ratón por encima del bloque de texto
+  campaignContent.addEventListener("mouseenter", () => {
+    // espera ~2 segundos tras el hover (y tras hacerse grande el texto)
+    campaignHoverTimeout = setTimeout(() => {
+      campaignOverlay.classList.add("is-open");
+
+      // resetea y reproduce el vídeo
+      campaignVideo.currentTime = 0;
+      const playPromise = campaignVideo.play();
+      if (playPromise !== undefined) {
+        playPromise.catch(() => {
+          // por si el navegador bloquea autoplay, no hacemos nada
+        });
+      }
+    }, 2000); // 2000 ms = 2 segundos
+  });
+
+  // si el usuario sale antes de los 2s, no se abre el vídeo
+  campaignContent.addEventListener("mouseleave", () => {
+    clearTimeout(campaignHoverTimeout);
+  });
+
+  function closeCampaignVideo() {
+    campaignOverlay.classList.remove("is-open");
+    campaignVideo.pause();
+  }
+
+  // cerrar con la X
+  campaignClose.addEventListener("click", closeCampaignVideo);
+
+  // cerrar clicando fuera del cuadro
+  campaignOverlay.addEventListener("click", (e) => {
+    if (e.target === campaignOverlay) {
+      closeCampaignVideo();
+    }
+  });
+
+  // cerrar con ESC
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && campaignOverlay.classList.contains("is-open")) {
+      closeCampaignVideo();
+    }
+  });
+}
+
+
+/* ================================
+   SECCIÓN 8 – GALERÍA ZAPATILLAS
+================================ */
+
+const shoeCards = document.querySelectorAll(".shoe-card");
+
+shoeCards.forEach((card) => {
+  const hoverImg = card.querySelector(".shoe-hover-img");
+  if (!hoverImg) return;
+
+  // Imagen "on feet" sigue al cursor
+  card.addEventListener("mousemove", (e) => {
+    const rect = card.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    hoverImg.style.left = `${x}px`;
+    hoverImg.style.top = `${y}px`;
+  });
+
+  card.addEventListener("mouseenter", () => {
+    hoverImg.style.opacity = 1;
+  });
+
+  card.addEventListener("mouseleave", () => {
+    hoverImg.style.opacity = 0;
+  });
+});
+
+// Animación de entrada con ScrollTrigger
+gsap.utils.toArray(".shoe-card").forEach((card, i) => {
+  gsap.from(card, {
+    scrollTrigger: {
+      trigger: card,
+      start: "top 85%",
+      end: "top 60%",
+      scrub: true
+    },
+    opacity: 0,
+    y: 40,
+    ease: "power2.out"
+  });
+
+  
+});
+
+
+/* ================================
+   SECCIÓN 9 – ABANICO + MODAL
+================================ */
+let fanSpacing = window.innerWidth <= 600
+  ? 45        // móvil
+  : window.innerWidth <= 1024
+  ? 60        // tablet
+  : 90;       // desktop
+
+const fanCards = gsap.utils.toArray(".fan-card");
+
+if (fanCards.length) {
+  const middleIndex = (fanCards.length - 1) / 2;
+  const basePositions = [];
+
+  // Posición inicial en abanico y guardamos posición base
+  function positionFanCards() {
+    fanCards.forEach((card, i) => {
+      const offset = i - middleIndex;    // -2, -1, 0, 1, 2...
+      const x = offset * fanSpacing;
+      const y = Math.abs(offset) * 20;
+      const rot = offset * 10;
+      const z = 10 - Math.abs(offset);
+
+      basePositions[i] = { x, y, rot, z };
+
+      gsap.set(card, {
+        x,
+        y,
+        rotation: rot,
+        scale: 1,
+        zIndex: z,
+        opacity: 0        // arranca oculto para la animación de entrada
+      });
+    });
+  }
+
+  positionFanCards();
+
+  // Animación de entrada con ScrollTrigger
+  const fanTl = gsap.timeline({
+    scrollTrigger: {
+      trigger: ".section-fan",
+      start: "top 80%",
+      end:   "top 40%",
+      scrub: true
+    }
+  });
+
+  fanTl.to(".fan-title", {
+    opacity: 1,
+    y: 0,
+    ease: "power2.out"
+  }, 0);
+
+  fanTl.to(".fan-subtitle", {
+    opacity: 1,
+    y: 0,
+    ease: "power2.out"
+  }, 0.1);
+
+  fanTl.to(".fan-card", {
+    opacity: 1,
+    ease: "power2.out",
+    stagger: 0.05
+  }, 0.2);
+
+  // -------- Hover: carta se levanta, las demás se abren un poco,
+  //         pero se respeta la X base del abanico --------
+  function fanHover(index) {
+    fanCards.forEach((card, i) => {
+      const base = basePositions[i];
+      const rel = i - index; // posición relativa a la activa
+
+      const isActive = i === index;
+      const isNeighbour = Math.abs(rel) === 1;
+
+      let y = base.y;
+      let rot = base.rot;
+      let scale = 1;
+      let zIndex = base.z;
+
+      if (isActive) {
+        y = base.y - 80;            // subir carta principal
+        rot = base.rot * 0.5;       // un poco más recta
+        scale = 1.08;
+        zIndex = 50;
+      } else if (isNeighbour) {
+        y = base.y + 20;            // se bajan un poco
+        rot = base.rot + rel * 4;   // se abren un poco
+        scale = 0.96;
+        zIndex = 30 - Math.abs(rel);
+      } else {
+        y = base.y + 35;            // las más alejadas se esconden un pelín
+        rot = base.rot;
+        scale = 0.9;
+        zIndex = 20 - Math.abs(rel);
+      }
+
+      gsap.to(card, {
+        x: base.x,          // 👈 X siempre es la base: el abanico NO se mueve
+        y,
+        rotation: rot,
+        scale,
+        zIndex,
+        duration: 0.35,
+        ease: "power3.out"
+      });
+    });
+  }
+
+  function fanReset() {
+    fanCards.forEach((card, i) => {
+      const base = basePositions[i];
+      gsap.to(card, {
+        x: base.x,
+        y: base.y,
+        rotation: base.rot,
+        scale: 1,
+        zIndex: base.z,
+        duration: 0.4,
+        ease: "power3.out"
+      });
+    });
+  }
+
+  fanCards.forEach((card, index) => {
+    card.addEventListener("mouseenter", () => fanHover(index));
+  });
+
+  const fanStack = document.querySelector(".fan-stack");
+  fanStack.addEventListener("mouseleave", fanReset);
+
+  // -------- Modal al hacer click --------
+  const fanModal        = document.getElementById("fan-modal");
+  const fanModalImg     = fanModal.querySelector(".fan-modal-img");
+  const fanModalCaption = fanModal.querySelector(".fan-modal-caption");
+  const fanModalClose   = fanModal.querySelector(".fan-modal-close");
+
+  function openFanModal(src, alt, title) {
+    fanModalImg.src = src;
+    fanModalImg.alt = alt || "";
+    fanModalCaption.textContent = title || alt || "";
+    fanModal.classList.add("is-open");
+    document.body.style.overflow = "hidden";
+  }
+
+  function closeFanModal() {
+    fanModal.classList.remove("is-open");
+    document.body.style.overflow = "";
+  }
+
+  fanCards.forEach(card => {
+    card.addEventListener("click", () => {
+      const img = card.querySelector("img");
+      const title = card.dataset.title;
+      openFanModal(img.src, img.alt, title);
+    });
+  });
+
+  fanModalClose.addEventListener("click", closeFanModal);
+  fanModal.addEventListener("click", (e) => {
+    if (e.target === fanModal) closeFanModal();
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && fanModal.classList.contains("is-open")) {
+      closeFanModal();
+    }
+  });
+}
