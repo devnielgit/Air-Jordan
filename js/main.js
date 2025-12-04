@@ -164,24 +164,48 @@ gsap.utils.toArray(".history-card").forEach((card, i) => {
 
 /* SECCION 5 */
 
-const horizontalTrack = document.querySelector(".horizontal-track");
-if (horizontalTrack) {
-  const panels = gsap.utils.toArray(".h-panel");
-  const totalPanels = panels.length;
+ScrollTrigger.matchMedia({
+"(min-width: 601px)": function () {
 
-  gsap.to(panels, {
-    xPercent: -100 * (totalPanels - 1),
-    ease: "none",
-    scrollTrigger: {
-      trigger: ".section-horizontal",
-      pin: true,
-      scrub: 1,
-      snap: 1 / (totalPanels - 1),
-      start: "top top",
-      end: () => "+=" + window.innerWidth * (totalPanels - 1)
+  const horizontalTrack = document.querySelector(".horizontal-track");
+  if (horizontalTrack) {
+    const panels = gsap.utils.toArray(".h-panel");
+    const totalPanels = panels.length;
+
+    gsap.to(panels, {
+      xPercent: -100 * (totalPanels - 1),
+      ease: "none",
+      scrollTrigger: {
+        trigger: ".section-horizontal",
+        pin: true,
+        scrub: 1,
+        snap: 1 / (totalPanels - 1),
+        start: "top top",
+        end: () => "+=" + window.innerWidth * (totalPanels - 1)
+      }
+    });
+  }
+},
+
+"(max-width: 600px)": function () {
+    ScrollTrigger.getAll().forEach(st => {
+      if (st.trigger && st.trigger.classList.contains("section-horizontal")) {
+        st.kill();
     }
   });
-}
+
+  gsap.set(".horizontal-track", {
+      display: "block",
+      height: "auto"
+    });
+
+    gsap.set(".h-panel", {
+      width: "100%",
+      height: "auto"
+    });
+  }
+
+});
 
 /* SECCION 6 */
 
@@ -382,8 +406,8 @@ if (fanCards.length) {
   const fanTl = gsap.timeline({
     scrollTrigger: {
       trigger: ".section-fan",
-      start: "top 80%",
-      end:   "top 40%",
+      start: "top 40%",
+      end:   "top 2%",
       scrub: true
     }
   });
