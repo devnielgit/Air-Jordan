@@ -304,7 +304,7 @@ shoeCards.forEach((card) => {
   const hoverImg = card.querySelector(".shoe-hover-img");
   if (!hoverImg) return;
 
-  // img cursor
+  // img sigue cursor 
   card.addEventListener("mousemove", (e) => {
     const rect = card.getBoundingClientRect();
     const x = e.clientX - rect.left;

@@ -1171,10 +1171,6 @@ body{
 @media (max-width: 600px){
 
   /* seccion1 */
-  #bgCanvas,
-  #three-container{
-    display: none !important;
-  }
   .left{
     align-self: flex-start;
     padding-top: 100px;
