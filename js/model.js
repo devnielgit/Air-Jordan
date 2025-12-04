@@ -59,7 +59,7 @@ const loader = new THREE.GLTFLoader();
 
 let model;
 
-// rotación objetivo para el hover (ratón) y base sobre la que se aplica
+// rotacion
 let hoverTargetRotation = { x: 0, y: 0 };
 let baseHoverRotation = { x: 0, y: 0 };
 
@@ -69,21 +69,23 @@ function updateModelResponsive() {
 
   const w = window.innerWidth;
 
-  if (w <= 600) { // movil (zapatillas pegadas a la derecha)
+  if (w <= 600) { // movil
     model.scale.set(4.2, 4.2, 4.2);
     model.position.set(0.85, 0.2, 0.3);
     model.rotation.set(0.15, -0.55, 0.10);
+
   } else if (w <= 1024) { // tablet
     model.scale.set(5.2, 5.2, 5.2);
     model.position.set(1.2, 0.22, 0.25);
     model.rotation.set(0.15, -0.55, 0.10);
+
   } else { // desktop
     model.scale.set(6.0, 6.0, 6.0);
     model.position.set(1.35, 0.25, 0.25);
     model.rotation.set(0.15, -0.55, 0.10);
   }
 
-  // actualizamos también las bases de rotación de hover tras un cambio responsive
+  // rotaciones
   baseHoverRotation.x = model.rotation.x;
   baseHoverRotation.y = model.rotation.y;
   hoverTargetRotation.x = model.rotation.x;
@@ -97,18 +99,18 @@ loader.load(
   (gltf) => {
     model = gltf.scene;
 
-    // escala+posicion inicial
+    // init position
     model.scale.set(6.0, 6.0, 6.0);
     model.position.set(1.35, 0.15, 0.25);
 
-    // rotación inicial
+    // rotacion
     model.rotation.set(
       0.15,
       -0.55,
       0.10
     );
 
-    // inicializamos rotaciones de hover
+    // rotaciones hover
     baseHoverRotation.x = model.rotation.x;
     baseHoverRotation.y = model.rotation.y;
     hoverTargetRotation.x = model.rotation.x;
@@ -116,7 +118,7 @@ loader.load(
 
     scene.add(model);
 
-    // aplicar ajustes responsive en función del ancho
+    // responsive ancho
     updateModelResponsive();
 
     camera.position.set(1.1, 1.5, 3.1);
@@ -168,7 +170,6 @@ function onPointerDown(event) {
 function onPointerUp() {
   isDragging = false;
 
-  // cuando sueltas el drag, la base del hover pasa a ser la rotación actual
   if (model) {
     baseHoverRotation.x = model.rotation.x;
     baseHoverRotation.y = model.rotation.y;
@@ -208,7 +209,7 @@ renderer.domElement.addEventListener('touchcancel', onPointerUp, { passive: true
 renderer.domElement.addEventListener('touchmove', onPointerMove, { passive: true });
 
 
-// cursor + rotación suave con el ratón (hover)
+// cursor
 renderer.domElement.addEventListener('mousemove', (event) => {
   const x = event.clientX;
   const y = event.clientY;
@@ -224,15 +225,12 @@ renderer.domElement.addEventListener('mousemove', (event) => {
     renderer.domElement.style.cursor = (x >= screenMidX) ? 'grab' : 'default';
   }
 
-  // solo rotamos con el hover en la mitad derecha y cuando NO está haciendo drag
   if (!isDragging && x >= screenMidX) {
-    // normalizamos posición del ratón alrededor del centro de la pantalla
-    const nx = (x - screenMidX) / window.innerWidth;   // ~ -0.5 a 0.5
-    const ny = (y - screenMidY) / window.innerHeight;  // ~ -0.5 a 0.5
+    const nx = (x - screenMidX) / window.innerWidth;
+    const ny = (y - screenMidY) / window.innerHeight;
 
-    // límites de rotación por hover (más pequeños que el drag)
-    const MAX_HOVER_ROT_Y = 1;   // ≈ 30º
-    const MAX_HOVER_ROT_X = 0.5;  // ≈ 14º
+    const MAX_HOVER_ROT_Y = 1;
+    const MAX_HOVER_ROT_X = 0.5;
 
     hoverTargetRotation.y = baseHoverRotation.y + nx * MAX_HOVER_ROT_Y;
     hoverTargetRotation.x = baseHoverRotation.x + ny * MAX_HOVER_ROT_X;
@@ -253,9 +251,9 @@ window.addEventListener('resize', onResize);
 function animate() {
   requestAnimationFrame(animate);
 
-  // rotación suave hacia el objetivo de hover cuando no se está haciendo drag
+  // rotación suave
   if (model && !isDragging) {
-    const LERP_SPEED = 0.3; // cuanto más alto, más rápido gira
+    const LERP_SPEED = 0.3;
 
     model.rotation.y += (hoverTargetRotation.y - model.rotation.y) * LERP_SPEED;
     model.rotation.x += (hoverTargetRotation.x - model.rotation.x) * LERP_SPEED;

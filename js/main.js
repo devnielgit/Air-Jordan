@@ -104,56 +104,54 @@ gsap.to(".outline-text--bottom", {
   }
 });
 
-/* ================================
-   SECCIÓN 3 – animación de entrada
-================================ */
+
+/* SECCIÓN 3 */
 
 const storyTl = gsap.timeline({
   scrollTrigger: {
     trigger: ".section-story",
-    start: "top 100%",   // ⬅ entra mucho antes, casi seguida de la 2
+    start: "top 100%",
     end: "bottom 30%",
     scrub: true
   }
 });
 
-// Título sube desde abajo
+// titulo
 storyTl.to(".story-title", {
   opacity: 1,
   y: 0,
   ease: "power2.out"
 }, 0.45);
 
-// Texto sube desde abajo un poco más tarde
+
 storyTl.to(".story-text", {
   opacity: 1,
   y: 0,
   ease: "power2.out"
 }, 0.35);
 
-// Imagen izquierda entra desde la izquierda
+// img izq
 storyTl.to(".story-img--left", {
   opacity: 1,
   x: 0,
   ease: "power2.out"
 }, 0.25);
 
-// Imagen derecha entra desde la derecha
+// img drch
 storyTl.to(".story-img--right", {
   opacity: 1,
   x: 0,
   ease: "power2.out"
 }, 0.35);
 
-/* ================================
-   SECCIÓN 4 – CARDS VERTICALES
-================================ */
+
+/* SECCIÓN 4 */
 
 gsap.utils.toArray(".history-card").forEach((card, i) => {
   gsap.to(card, {
     scrollTrigger:{
       trigger: card,
-      start: "top 100%",    // entra desde fuera al bajar
+      start: "top 100%",
       end: "top 25%",
       scrub: true
     },
@@ -163,9 +161,8 @@ gsap.utils.toArray(".history-card").forEach((card, i) => {
   });
 });
 
-/* ================================
-   SECCIÓN 5 – SCROLL HORIZONTAL
-================================ */
+
+/* SECCION 5 */
 
 const horizontalTrack = document.querySelector(".horizontal-track");
 if (horizontalTrack) {
@@ -186,9 +183,7 @@ if (horizontalTrack) {
   });
 }
 
-/* ================================
-   SECCIÓN 6 – DUELO / OPOSICIÓN
-================================ */
+/* SECCION 6 */
 
 const duelTl = gsap.timeline({
   scrollTrigger: {
@@ -199,14 +194,14 @@ const duelTl = gsap.timeline({
   }
 });
 
-// 1) Kicker entra suave desde abajo
+// Kicker
 duelTl.fromTo(".duel-kicker",
   { opacity: 0, y: 10 },
   { opacity: 1, y: 0, ease: "power2.out" },
   0
 );
 
-// 2) Imágenes entran desde los lados
+// img
 duelTl.from(".duel-col--left img", {
   x: -120,
   opacity: 0,
@@ -219,15 +214,14 @@ duelTl.from(".duel-col--right img", {
   ease: "power2.out"
 }, 0.3);
 
-// 3) Textos: fade + desplazamiento lateral
-//    Nike desde la izquierda
+// teext
 duelTl.fromTo(".duel-col--left .duel-text",
   { opacity: 0, x: -40 },
   { opacity: 1, x: 0, ease: "power2.out" },
   0.6
 );
 
-//    Jordan desde la derecha
+// jordan
 duelTl.fromTo(".duel-col--right .duel-text",
   { opacity: 0, x: 40 },
   { opacity: 1, x: 0, ease: "power2.out" },
@@ -235,11 +229,9 @@ duelTl.fromTo(".duel-col--right .duel-text",
 );
 
 
-/* ================================
-   SECCIÓN 7 – CAMPAÑA “BANNED”
-================================ */
+/* SECCIÓN 7 */
 
-// Animación de entrada al hacer scroll
+// animacion enrtada
 gsap.to(".campaign-content", {
   scrollTrigger: {
     trigger: ".section-campaign",
@@ -252,7 +244,7 @@ gsap.to(".campaign-content", {
   ease: "power2.out"
 });
 
-// Popup de vídeo tras unos segundos de hover
+// Popup de vídeo
 const campaignContent = document.querySelector(".campaign-content");
 const campaignOverlay = document.getElementById("campaignVideo");
 const campaignVideo   = campaignOverlay ? campaignOverlay.querySelector(".campaign-video") : null;
@@ -261,24 +253,23 @@ const campaignClose   = campaignOverlay ? campaignOverlay.querySelector(".campai
 let campaignHoverTimeout;
 
 if (campaignContent && campaignOverlay && campaignVideo && campaignClose) {
-  // cuando el usuario pasa el ratón por encima del bloque de texto
+  // hover en texto
   campaignContent.addEventListener("mouseenter", () => {
-    // espera ~2 segundos tras el hover (y tras hacerse grande el texto)
+    // 2seg
     campaignHoverTimeout = setTimeout(() => {
       campaignOverlay.classList.add("is-open");
 
-      // resetea y reproduce el vídeo
+      // resetea video
       campaignVideo.currentTime = 0;
       const playPromise = campaignVideo.play();
       if (playPromise !== undefined) {
         playPromise.catch(() => {
-          // por si el navegador bloquea autoplay, no hacemos nada
         });
       }
-    }, 2000); // 2000 ms = 2 segundos
+    }, 2000);
   });
 
-  // si el usuario sale antes de los 2s, no se abre el vídeo
+  // no abrir 2seg antes
   campaignContent.addEventListener("mouseleave", () => {
     clearTimeout(campaignHoverTimeout);
   });
@@ -288,17 +279,15 @@ if (campaignContent && campaignOverlay && campaignVideo && campaignClose) {
     campaignVideo.pause();
   }
 
-  // cerrar con la X
+  // cerrar video
   campaignClose.addEventListener("click", closeCampaignVideo);
 
-  // cerrar clicando fuera del cuadro
   campaignOverlay.addEventListener("click", (e) => {
     if (e.target === campaignOverlay) {
       closeCampaignVideo();
     }
   });
 
-  // cerrar con ESC
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape" && campaignOverlay.classList.contains("is-open")) {
       closeCampaignVideo();
@@ -307,9 +296,7 @@ if (campaignContent && campaignOverlay && campaignVideo && campaignClose) {
 }
 
 
-/* ================================
-   SECCIÓN 8 – GALERÍA ZAPATILLAS
-================================ */
+/* SECCION 8 */
 
 const shoeCards = document.querySelectorAll(".shoe-card");
 
@@ -317,7 +304,7 @@ shoeCards.forEach((card) => {
   const hoverImg = card.querySelector(".shoe-hover-img");
   if (!hoverImg) return;
 
-  // Imagen "on feet" sigue al cursor
+  // img cursor
   card.addEventListener("mousemove", (e) => {
     const rect = card.getBoundingClientRect();
     const x = e.clientX - rect.left;
@@ -336,7 +323,7 @@ shoeCards.forEach((card) => {
   });
 });
 
-// Animación de entrada con ScrollTrigger
+// animacion entrada
 gsap.utils.toArray(".shoe-card").forEach((card, i) => {
   gsap.from(card, {
     scrollTrigger: {
@@ -354,14 +341,12 @@ gsap.utils.toArray(".shoe-card").forEach((card, i) => {
 });
 
 
-/* ================================
-   SECCIÓN 9 – ABANICO + MODAL
-================================ */
+/* SECCION 9 */
 let fanSpacing = window.innerWidth <= 600
-  ? 45        // móvil
+  ? 45        // responsive abanico móvil
   : window.innerWidth <= 1024
-  ? 60        // tablet
-  : 90;       // desktop
+  ? 60        // responsive abanico tablet
+  : 90;       // responsive abanico desktop
 
 const fanCards = gsap.utils.toArray(".fan-card");
 
@@ -369,10 +354,10 @@ if (fanCards.length) {
   const middleIndex = (fanCards.length - 1) / 2;
   const basePositions = [];
 
-  // Posición inicial en abanico y guardamos posición base
+  // posicion inical
   function positionFanCards() {
     fanCards.forEach((card, i) => {
-      const offset = i - middleIndex;    // -2, -1, 0, 1, 2...
+      const offset = i - middleIndex;
       const x = offset * fanSpacing;
       const y = Math.abs(offset) * 20;
       const rot = offset * 10;
@@ -386,14 +371,14 @@ if (fanCards.length) {
         rotation: rot,
         scale: 1,
         zIndex: z,
-        opacity: 0        // arranca oculto para la animación de entrada
+        opacity: 0
       });
     });
   }
 
   positionFanCards();
 
-  // Animación de entrada con ScrollTrigger
+  // animacion entrada
   const fanTl = gsap.timeline({
     scrollTrigger: {
       trigger: ".section-fan",
@@ -421,12 +406,12 @@ if (fanCards.length) {
     stagger: 0.05
   }, 0.2);
 
-  // -------- Hover: carta se levanta, las demás se abren un poco,
-  //         pero se respeta la X base del abanico --------
+
+  // hover img
   function fanHover(index) {
     fanCards.forEach((card, i) => {
       const base = basePositions[i];
-      const rel = i - index; // posición relativa a la activa
+      const rel = i - index;
 
       const isActive = i === index;
       const isNeighbour = Math.abs(rel) === 1;
@@ -436,25 +421,26 @@ if (fanCards.length) {
       let scale = 1;
       let zIndex = base.z;
 
+      // subir carta
       if (isActive) {
-        y = base.y - 80;            // subir carta principal
-        rot = base.rot * 0.5;       // un poco más recta
+        y = base.y - 80;
+        rot = base.rot * 0.5;
         scale = 1.08;
         zIndex = 50;
       } else if (isNeighbour) {
-        y = base.y + 20;            // se bajan un poco
-        rot = base.rot + rel * 4;   // se abren un poco
+        y = base.y + 20;
+        rot = base.rot + rel * 4;
         scale = 0.96;
         zIndex = 30 - Math.abs(rel);
       } else {
-        y = base.y + 35;            // las más alejadas se esconden un pelín
+        y = base.y + 35;
         rot = base.rot;
         scale = 0.9;
         zIndex = 20 - Math.abs(rel);
       }
 
       gsap.to(card, {
-        x: base.x,          // 👈 X siempre es la base: el abanico NO se mueve
+        x: base.x,
         y,
         rotation: rot,
         scale,
@@ -487,7 +473,7 @@ if (fanCards.length) {
   const fanStack = document.querySelector(".fan-stack");
   fanStack.addEventListener("mouseleave", fanReset);
 
-  // -------- Modal al hacer click --------
+  // modal
   const fanModal        = document.getElementById("fan-modal");
   const fanModalImg     = fanModal.querySelector(".fan-modal-img");
   const fanModalCaption = fanModal.querySelector(".fan-modal-caption");
