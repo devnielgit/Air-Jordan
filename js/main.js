@@ -111,7 +111,7 @@ const storyTl = gsap.timeline({
   scrollTrigger: {
     trigger: ".section-story",
     start: "top 100%",
-    end: "bottom 30%",
+    end: "bottom 50%",
     scrub: true
   }
 });
@@ -367,7 +367,7 @@ gsap.utils.toArray(".shoe-card").forEach((card, i) => {
 
 /* SECCION 9 */
 let fanSpacing = window.innerWidth <= 600
-  ? 45        // responsive abanico móvil
+  ? 30        // responsive abanico móvil
   : window.innerWidth <= 1024
   ? 60        // responsive abanico tablet
   : 90;       // responsive abanico desktop
@@ -406,7 +406,7 @@ if (fanCards.length) {
   const fanTl = gsap.timeline({
     scrollTrigger: {
       trigger: ".section-fan",
-      start: "top 40%",
+      start: "top 60%",
       end:   "top 2%",
       scrub: true
     }
